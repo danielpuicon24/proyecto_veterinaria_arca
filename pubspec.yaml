@@ -51,6 +51,8 @@ dependencies:
   firebase_core: ^2.1.1
   shared_preferences: ^2.0.15
   sqflite: ^2.2.0+3
+  panorama: ^0.4.1
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
