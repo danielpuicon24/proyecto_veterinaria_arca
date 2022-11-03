@@ -10,8 +10,8 @@ import '../../providers/usuario_provider.dart';
 import '../../usuario/logueado_controller.dart';
 
 class LoginController extends GetxController {
-  TextEditingController emailController = TextEditingController(text: 'juan23xx@gmail.com');
-  TextEditingController passwordController = TextEditingController(text: 'Juan123@');
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   PreferenciasUsuario prefs = PreferenciasUsuario();
   UsersProvider usersProvider = UsersProvider();
 
@@ -22,8 +22,6 @@ class LoginController extends GetxController {
 
     if (isValidForm(email, password)) {
       UsuarioModel usuarioModel = await usersProvider.iniciarSesion(email, password);
-      LogueadoController logueado = Get.put(LogueadoController());
-
       var usuario = usuarioModel.toJson();
       if (usuarioModel.resultado == "0") {
         prefs.logueado = true;

@@ -15,6 +15,7 @@ import 'package:proyecto_veterinaria_arca/usuario/logueado_controller.dart';
 import 'environment/preferencias_usuario.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   final prefs = PreferenciasUsuario();
   await Firebase.initializeApp();
@@ -23,8 +24,6 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-
-  final prefs = PreferenciasUsuario();
 
   // This widget is the root of your application.
   @override
@@ -43,7 +42,6 @@ class MyApp extends StatelessWidget {
       //initialRoute: usuarioController.usuario.idUsuario == "0" ? '/' : '/home',
      // home: PreInit(),
       home: PreInit(),
-      initialRoute: prefs.getvalidarSesion,
       getPages: [
         GetPage(name: '/', page: () => const WelcomePage()),
         GetPage(name: '/register', page: () => const RegisterPage()),
@@ -58,7 +56,7 @@ class PreInit extends StatelessWidget {
   PreferenciasUsuario logueado = PreferenciasUsuario();
   @override
   Widget build(BuildContext context) {
-    return logueado.logueado  ?  HomePage() : WelcomePage();
+    return logueado.logueado  ?  const HomePage() : const WelcomePage();
   }
 }
 

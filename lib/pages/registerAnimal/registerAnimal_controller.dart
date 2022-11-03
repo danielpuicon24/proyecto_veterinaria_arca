@@ -232,7 +232,7 @@ class RegisterAnimalController extends GetxController {
     String time = DateTime.now().toString();
     firebase_storage.TaskSnapshot upload = await _reference
         .child('Mascota2$time.jpg')
-        .putFile(File(imageFile!.path));
+        .putFile(File(imageFile2!.path));
     String url = await upload.ref.getDownloadURL();
     return url;
   }
@@ -242,7 +242,7 @@ class RegisterAnimalController extends GetxController {
     String time = DateTime.now().toString();
     firebase_storage.TaskSnapshot upload = await _reference
         .child('Mascota3$time.jpg')
-        .putFile(File(imageFile!.path));
+        .putFile(File(imageFile3!.path));
     String url = await upload.ref.getDownloadURL();
     return url;
   }

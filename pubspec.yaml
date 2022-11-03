@@ -50,6 +50,7 @@ dependencies:
   firebase_storage: ^11.0.3
   firebase_core: ^2.1.1
   shared_preferences: ^2.0.15
+  sqflite: ^2.2.0+3
 
 dev_dependencies:
   flutter_test:

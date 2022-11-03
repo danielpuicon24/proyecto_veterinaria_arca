@@ -4,7 +4,7 @@ class CategoriaModel {
     required this.descripcion,
     required this.nombres,
     required this.apellidos,
-    required this.fechaCreacion,
+     this.fechaCreacion,
     required this.imagen,
   });
 
@@ -12,7 +12,7 @@ class CategoriaModel {
   String descripcion;
   String nombres;
   String apellidos;
-  DateTime fechaCreacion;
+  DateTime? fechaCreacion;
   String imagen;
 
   factory CategoriaModel.fromJson(Map<String, dynamic> json) => CategoriaModel(
@@ -29,7 +29,7 @@ class CategoriaModel {
     "Descripcion": descripcion,
     "Nombres": nombres,
     "Apellidos": apellidos,
-    "FechaCreacion": fechaCreacion.toIso8601String(),
+    "FechaCreacion": fechaCreacion!.toIso8601String(),
     "Imagen": imagen,
   };
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../environment/db/db_arca.dart';
+import '../models/Mascota.dart';
 import 'invite_list.dart';
 
 class ListAnimals extends StatefulWidget {
@@ -37,76 +40,129 @@ class _ListAnimalsState extends State<ListAnimals>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
-      body: FutureBuilder<bool>(
-        future: getData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (!snapshot.hasData) {
-            return const SizedBox();
-          } else {
-            return Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: FutureBuilder<bool>(
-                      future: getData(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                        if (!snapshot.hasData) {
-                          return const SizedBox();
-                        } else {
-                          return GridView(
-                            padding: const EdgeInsets.only(
-                                top: 0, left: 12, right: 12),
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            children: List<Widget>.generate(
-                              inviteFriend.length,
-                              (int index) {
-                                final int count = inviteFriend.length;
-                                final Animation<double> animation =
-                                    Tween<double>(begin: 0.0, end: 1.0).animate(
-                                  CurvedAnimation(
-                                    parent: animationController!,
-                                    curve: Interval((1 / count) * index, 1.0,
-                                        curve: Curves.fastOutSlowIn),
+      body: FutureBuilder(
+        future: DBArca.db.getMascotaFavourites(),
+        builder: (BuildContext context, AsyncSnapshot snap) {
+          if (snap.hasData) {
+            List<MascotaModel> mascotas = snap.data;
+            return GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 1.7),
+              ),
+              itemCount: mascotas.length,
+              itemBuilder: (BuildContext ctx, index) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: shadowList,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 70,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image:
+                                    NetworkImage(mascotas[index].imagen1),
                                   ),
-                                );
-                                animationController?.forward();
-                                return InviteFriendView(
-                                  animation: animation,
-                                  animationController: animationController,
-                                  listData: inviteFriend[index],
-                                  callBack: () {
-                                    Navigator.push<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) =>
-                                            inviteFriend[index].navigateScreen!,
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                                ),
+                              ),
                             ),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: multiple ? 2 : 1,
-                              mainAxisSpacing: 12.0,
-                              crossAxisSpacing: 12.0,
-                              childAspectRatio: 1.5,
+                            Container(
+                              width: 25,
+                              height: 25,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white38,
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  //infoAnimalController.addOrNotFavorite2();
+                                },
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  Icons.favorite,
+                                  size: 15,
+                                  color: mascotas[index].favorito == "true"
+                                      ? Color(0XFF4760FF)
+                                      : Colors.black,
+                                ),
+                              ),
                             ),
-                          );
-                        }
-                      },
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              mascotas[index]
+                                  .tamanio
+                                  .toUpperCase()
+                                  .toUpperCase(),
+                              style: GoogleFonts.openSans(
+                                  color: Color(0XFF000000),
+                                  fontWeight: FontWeight.bold),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              mascotas[index].raza.toUpperCase(),
+                              style: GoogleFonts.openSans(
+                                  color: Color(0XFFBCBABE)),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            width: 120,
+                            height: 3.5,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             );
           }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -165,6 +221,14 @@ class _ListAnimalsState extends State<ListAnimals>
     );
   }
 }
+
+List<BoxShadow> shadowList = [
+  BoxShadow(
+      color: Color.fromARGB(255, 226, 226, 226),
+      blurRadius: 30,
+      offset: Offset(0, 10))
+];
+
 
 class InviteFriendView extends StatelessWidget {
   const InviteFriendView(

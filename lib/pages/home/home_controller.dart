@@ -1,12 +1,16 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:proyecto_veterinaria_arca/environment/preferencias_usuario.dart';
 import 'package:proyecto_veterinaria_arca/usuario/usuario_conntroller.dart';
 
+import '../../environment/db/db_arca.dart';
 import '../../models/Categoria.dart';
 import '../../models/Mascota.dart';
+import '../../models/Raza.dart';
 import '../../models/UsuarioLogin.dart';
+import '../../providers/adoptar_provider.dart';
 import '../../providers/animal_provider.dart';
 import '../../providers/categoria_provider.dart';
 import '../../usuario/logueado_controller.dart';
@@ -15,7 +19,17 @@ import 'mascota_controller.dart';
 class HomeController extends GetxController {
   UsuarioModel user = UsuarioModel.fromJson(GetStorage().read('usuario') ?? {});
   PreferenciasUsuario prefs = PreferenciasUsuario();
+  GlobalKey<FormFieldState> keyRaza = GlobalKey<FormFieldState>();
+  List<RazaModel> razaItems = [];
 
+  AdoptarProvider adoptarProvider = AdoptarProvider();
+
+  Future<List<RazaModel>> listAllRazas() async {
+    razaItems = await adoptarProvider.getListarRaza();
+    var lista = razaItems.toList();
+    //GetStorage().write('categorias', lista);
+    return razaItems;
+  }
 
   HomeController() {
     print('USUARIO DE SESION: ${user.toJson()}');
@@ -35,6 +49,9 @@ class HomeController extends GetxController {
     var mascota = mascotaModel.toJson();
     GetStorage().write('mascota', mascota);
   }
+
+
+
   CategoriaProvider categoriaProvider = CategoriaProvider();
   AnimalsProvider animalsProvider = AnimalsProvider();
 
@@ -46,10 +63,28 @@ class HomeController extends GetxController {
     return categorias;
   }
 
-  Future<List<MascotaModel>> listAllAnimals() async{
-    List<MascotaModel> mascotas = await animalsProvider.getListarMascotas();
+  List<MascotaModel> mascotas = [];
+  List<MascotaModel> mascotasAux = [];
+  String idRazaValue = "";
+
+  listAllAnimals() async{
+    mascotas = await animalsProvider.getListarMascotas();
+    mascotasAux = mascotas;
     //GetStorage().write('categorias', lista);
-    return mascotas;
+    //changedRaza(idRazaValue);
+
   }
+
+  changeCategoria(String idCategoria){
+    mascotas = mascotasAux;
+    mascotas =
+        mascotas.where((element) => element.idCategoria == idCategoria).toList();
+  }
+  changedRaza(String idRaza) {
+    mascotas = mascotasAux;
+    mascotas =
+        mascotas.where((element) => element.idRaza == idRaza).toList();
+  }
+
 
 }

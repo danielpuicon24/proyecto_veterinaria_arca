@@ -5,7 +5,7 @@ class RazaModel {
     required this.descripcion,
     required this.origen,
     required this.usuarioCreacion,
-    required this.fechaCracion,
+    this.fechaCracion,
     required this.estado,
     required this.nombres,
     required this.apellidos,
@@ -16,7 +16,7 @@ class RazaModel {
   String descripcion;
   String origen;
   String usuarioCreacion;
-  DateTime fechaCracion;
+  DateTime? fechaCracion;
   String estado;
   String nombres;
   String apellidos;
@@ -39,7 +39,7 @@ class RazaModel {
     "Descripcion": descripcion,
     "Origen": origen,
     "UsuarioCreacion": usuarioCreacion,
-    "FechaCracion": fechaCracion.toIso8601String(),
+    "FechaCracion": fechaCracion!.toIso8601String(),
     "Estado": estado,
     "Nombres": nombres,
     "Apellidos": apellidos,
