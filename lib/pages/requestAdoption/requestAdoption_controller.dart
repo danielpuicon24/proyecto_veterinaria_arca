@@ -17,7 +17,7 @@ class RequestAdoptionController extends GetxController{
   final firebase_storage.FirebaseStorage _storage =
       firebase_storage.FirebaseStorage.instance;
   RequestAdoptionProvider requestAdoptionProvider = Get.put(RequestAdoptionProvider());
-
+  final isLoading = false.obs;
   FilePickerResult? result;
   PlatformFile? file;
   late  String name = "";
@@ -60,9 +60,11 @@ class RequestAdoptionController extends GetxController{
 
   Future<String> postRegistrarSolicitud(int idUsuario, int IdMascota) async {
     if(load.isTrue){
+      isLoading.value = true;
       String url = await uploadDocumentFirebase();
       String? response =
       await requestAdoptionProvider.postRegistrarSolicitud(idUsuario,IdMascota, url);
+      isLoading.value = false;
       goToHomePage();
       Get.snackbar("Adopcion solicitada", 'Gracias');
       return response;

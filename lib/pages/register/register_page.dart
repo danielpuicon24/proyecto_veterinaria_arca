@@ -12,7 +12,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   RegisterController con = Get.put(RegisterController());
 
   @override
@@ -119,6 +118,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   SizedBox(height: 10.0),
+                  Obx(() => con.isLoading.isTrue
+                      ? Container(
+                          color: Colors.white60,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : Container()),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,

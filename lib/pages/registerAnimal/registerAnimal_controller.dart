@@ -32,6 +32,7 @@ class RegisterAnimalController extends GetxController {
   final load = false.obs;
   final load2 = false.obs;
   final load3 = false.obs;
+  final isLoading = false.obs;
   String sexo = "";
   String tamano = "";
   String raza = "";
@@ -283,6 +284,7 @@ class RegisterAnimalController extends GetxController {
         imagen1,
         imagen2,
         imagen3)) {
+      isLoading.value = true;
       String url1 = await uploadImage1Firebase();
       String url2 = await uploadImage2Firebase();
       String url3 = await uploadImage3Firebase();
@@ -305,6 +307,7 @@ class RegisterAnimalController extends GetxController {
           esterelizado: itemEsterilizado);
 
       await adoptarProvider.postRegistrarAdopcion(mascotaRegisterModel);
+      isLoading.value = false;
       goToHomePage();
       Get.snackbar("Mascota registrada", 'Listo');
     }

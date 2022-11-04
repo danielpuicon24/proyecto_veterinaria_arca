@@ -14,6 +14,7 @@ class RegisterController extends GetxController {
   File? imageFileRegister;
   final loadRegister = false.obs;
   final checkboxValue = false.obs;
+  final isLoading = false.obs;
 
   final firebase_storage.FirebaseStorage _storage =
       firebase_storage.FirebaseStorage.instance;
@@ -78,6 +79,7 @@ class RegisterController extends GetxController {
           if(loadRegister.isFalse){
             Get.snackbar('Debe ingresar una imagen', 'Verifica');
           }else{
+            isLoading.value = true;
             String url = await uploadImageFirebase(dni,nombre);
             UsuarioRegisterModel usuario = UsuarioRegisterModel(
                 docTipo: "DNI",
@@ -96,6 +98,7 @@ class RegisterController extends GetxController {
             RespuestaModel? response =
             await usersProvider.postRegistrarUsuario(usuario);
 
+            isLoading.value = false;
             if (response!.resultado == "3") {
               Get.snackbar(response.mensaje, 'Ingresa otro numero');
             }  else if(response.resultado == "2"){
@@ -104,6 +107,7 @@ class RegisterController extends GetxController {
               Get.snackbar(response.mensaje, 'Estas listo');
               con.goToLoginPage();
             }
+
           }
         }
       }

@@ -23,6 +23,8 @@ class _RegisterAnimalPageState extends State<RegisterAnimalPage> {
   int _valueGenero = 0;
 
   RegisterController controller = Get.put(RegisterController());
+  RegisterAnimalController registerAnimalController =
+      Get.put(RegisterAnimalController());
 
   @override
   Widget build(BuildContext context) {
@@ -309,6 +311,16 @@ class _RegisterAnimalPageState extends State<RegisterAnimalPage> {
                       ],
                     ),*/
                     const SizedBox(height: 30.0),
+                    Obx(
+                      () => registerAnimalController.isLoading.isTrue
+                          ? Container(
+                              color: Colors.white60,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : Container(),
+                    ),
                     _buttonRegistrar(),
                     const SizedBox(height: 20.0),
                   ],
@@ -382,14 +394,14 @@ Widget _textFieldTamano() {
         borderRadius: BorderRadius.circular(15), color: Color(0XFFF0F0F0)),
     items: con.tamanoItems
         .map((item) => DropdownMenuItem<String>(
-      value: item,
-      child: Text(
-        item,
-        style: const TextStyle(
-          fontSize: 14,
-        ),
-      ),
-    ))
+              value: item,
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ))
         .toList(),
     validator: (value) {
       if (value == null) {
@@ -461,7 +473,8 @@ Widget _textFieldCategoria() {
           isExpanded: true,
           hint: const Text(
             'Selecciona la Categoria',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3A4F83)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Color(0xFF3A4F83)),
           ),
           icon: const Icon(
             Icons.arrow_drop_down,
@@ -471,17 +484,18 @@ Widget _textFieldCategoria() {
           buttonHeight: 60,
           buttonPadding: const EdgeInsets.only(left: 20, right: 10),
           dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: Color(0XFFF0F0F0)),
+              borderRadius: BorderRadius.circular(15),
+              color: Color(0XFFF0F0F0)),
           items: listacategoria
               .map((item) => DropdownMenuItem<String>(
-            value: item.idCategoria,
-            child: Text(
-              item.descripcion,
-              style: const TextStyle(
-                fontSize: 14,
-              ),
-            ),
-          ))
+                    value: item.idCategoria,
+                    child: Text(
+                      item.descripcion,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ))
               .toList(),
           validator: (value) {
             if (value == null) {
@@ -509,95 +523,99 @@ Widget _textFieldCategoria() {
 Widget _textFieldColor() {
   RegisterAnimalController con = Get.put(RegisterAnimalController());
 
-  return FutureBuilder(future: con.listAllColor(), builder: (BuildContext context, AsyncSnapshot snap){
-    if(snap.hasData){
-      List<ColorModel> colores = snap.data;
-      return DropdownButtonFormField2(
-        key: con.keyColor,
-        focusColor: Colors.white,
-        //value: con.color.isNotEmpty ? con.sexo : "MACHO",
-        selectedItemHighlightColor: Colors.white,
-        decoration: InputDecoration(
-          //Add isDense true and zero Padding.
-          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          filled: true,
-          hoverColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          focusedBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-          ),
-          errorBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          focusColor: Colors.red,
-          fillColor: Colors.white,
-          //Add more decoration as you want here
-          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-        ),
-        isExpanded: true,
-        hint: const Text(
-          'Selecciona el Color',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3A4F83)),
-        ),
-        icon: const Icon(
-          Icons.arrow_drop_down,
-          color: Colors.black45,
-        ),
-        iconSize: 30,
-        buttonHeight: 60,
-        buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-        dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Color(0XFFF0F0F0)),
-        items: colores
-            .map((item) => DropdownMenuItem<String>(
-          value: item.idColor,
-          child: Text(
-            item.descripcion,
-            style: const TextStyle(
-              fontSize: 14,
+  return FutureBuilder(
+      future: con.listAllColor(),
+      builder: (BuildContext context, AsyncSnapshot snap) {
+        if (snap.hasData) {
+          List<ColorModel> colores = snap.data;
+          return DropdownButtonFormField2(
+            key: con.keyColor,
+            focusColor: Colors.white,
+            //value: con.color.isNotEmpty ? con.sexo : "MACHO",
+            selectedItemHighlightColor: Colors.white,
+            decoration: InputDecoration(
+              //Add isDense true and zero Padding.
+              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
+              filled: true,
+              hoverColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+              ),
+              errorBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusColor: Colors.red,
+              fillColor: Colors.white,
+              //Add more decoration as you want here
+              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
             ),
-          ),
-        ))
-            .toList(),
-        validator: (value) {
-          if (value == null) {
-            return 'Por favor selecciona el color';
-          }
-        },
-        onChanged: (value) {
-          con.color = value as String;
-          con.colorController.text = value as String;
-        },
-        onSaved: (value) {
-          con.color = value as String;
+            isExpanded: true,
+            hint: const Text(
+              'Selecciona el Color',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Color(0xFF3A4F83)),
+            ),
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: Colors.black45,
+            ),
+            iconSize: 30,
+            buttonHeight: 60,
+            buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+            dropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Color(0XFFF0F0F0)),
+            items: colores
+                .map((item) => DropdownMenuItem<String>(
+                      value: item.idColor,
+                      child: Text(
+                        item.descripcion,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ))
+                .toList(),
+            validator: (value) {
+              if (value == null) {
+                return 'Por favor selecciona el color';
+              }
+            },
+            onChanged: (value) {
+              con.color = value as String;
+              con.colorController.text = value as String;
+            },
+            onSaved: (value) {
+              con.color = value as String;
 
-          con.colorController.text = value as String;
-        },
-      );
-    }
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  });
+              con.colorController.text = value as String;
+            },
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      });
 }
 
 Widget _textFieldEsterilizado() {
@@ -659,14 +677,14 @@ Widget _textFieldEsterilizado() {
         borderRadius: BorderRadius.circular(15), color: Color(0XFFF0F0F0)),
     items: con.esterilizadoItems
         .map((item) => DropdownMenuItem<String>(
-      value: item,
-      child: Text(
-        item,
-        style: const TextStyle(
-          fontSize: 14,
-        ),
-      ),
-    ))
+              value: item,
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ))
         .toList(),
     validator: (value) {
       if (value == null) {
@@ -741,14 +759,14 @@ Widget _textFieldSexo() {
         borderRadius: BorderRadius.circular(15), color: Color(0XFFF0F0F0)),
     items: con.sexItems
         .map((item) => DropdownMenuItem<String>(
-      value: item,
-      child: Text(
-        item,
-        style: const TextStyle(
-          fontSize: 14,
-        ),
-      ),
-    ))
+              value: item,
+              child: Text(
+                item,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ))
         .toList(),
     validator: (value) {
       if (value == null) {
@@ -915,95 +933,99 @@ Widget _textFieldNombre() {
 Widget _textFieldRaza() {
   RegisterAnimalController con = Get.put(RegisterAnimalController());
 
-  return FutureBuilder(future: con.listAllRazas(), builder: (BuildContext context, AsyncSnapshot snap){
-    if(snap.hasData){
-      List<RazaModel> razas = snap.data;
-      return DropdownButtonFormField2(
-        key: con.keyRaza,
-        focusColor: Colors.white,
-        //value: con.color.isNotEmpty ? con.sexo : "MACHO",
-        selectedItemHighlightColor: Colors.white,
-        decoration: InputDecoration(
-          //Add isDense true and zero Padding.
-          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          filled: true,
-          hoverColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          focusedBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-          ),
-          errorBorder: OutlineInputBorder(
-            // width: 0.0 produces a thin "hairline" border
-            borderSide: const BorderSide(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          focusColor: Colors.red,
-          fillColor: Colors.white,
-          //Add more decoration as you want here
-          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-        ),
-        isExpanded: true,
-        hint: const Text(
-          'Selecciona la Raza',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3A4F83)),
-        ),
-        icon: const Icon(
-          Icons.arrow_drop_down,
-          color: Colors.black45,
-        ),
-        iconSize: 30,
-        buttonHeight: 60,
-        buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-        dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: Color(0XFFF0F0F0)),
-        items: razas
-            .map((item) => DropdownMenuItem<String>(
-          value: item.idRaza,
-          child: Text(
-            item.nombre,
-            style: const TextStyle(
-              fontSize: 14,
+  return FutureBuilder(
+      future: con.listAllRazas(),
+      builder: (BuildContext context, AsyncSnapshot snap) {
+        if (snap.hasData) {
+          List<RazaModel> razas = snap.data;
+          return DropdownButtonFormField2(
+            key: con.keyRaza,
+            focusColor: Colors.white,
+            //value: con.color.isNotEmpty ? con.sexo : "MACHO",
+            selectedItemHighlightColor: Colors.white,
+            decoration: InputDecoration(
+              //Add isDense true and zero Padding.
+              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
+              filled: true,
+              hoverColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+              ),
+              errorBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              focusColor: Colors.red,
+              fillColor: Colors.white,
+              //Add more decoration as you want here
+              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
             ),
-          ),
-        ))
-            .toList(),
-        validator: (value) {
-          if (value == null) {
-            return 'Por favor selecciona la raza';
-          }
-        },
-        onChanged: (value) {
-          con.raza = value as String;
-          con.razaController.text = value as String;
-        },
-        onSaved: (value) {
-          con.color = value as String;
+            isExpanded: true,
+            hint: const Text(
+              'Selecciona la Raza',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Color(0xFF3A4F83)),
+            ),
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: Colors.black45,
+            ),
+            iconSize: 30,
+            buttonHeight: 60,
+            buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+            dropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Color(0XFFF0F0F0)),
+            items: razas
+                .map((item) => DropdownMenuItem<String>(
+                      value: item.idRaza,
+                      child: Text(
+                        item.nombre,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ))
+                .toList(),
+            validator: (value) {
+              if (value == null) {
+                return 'Por favor selecciona la raza';
+              }
+            },
+            onChanged: (value) {
+              con.raza = value as String;
+              con.razaController.text = value as String;
+            },
+            onSaved: (value) {
+              con.color = value as String;
 
-          con.razaController.text = value as String;
-        },
-      );
-    }
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  });
+              con.razaController.text = value as String;
+            },
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      });
 }
 
 Widget _textFieldVacunas() {

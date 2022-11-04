@@ -14,8 +14,10 @@ class LoginController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   PreferenciasUsuario prefs = PreferenciasUsuario();
   UsersProvider usersProvider = UsersProvider();
+  final isLoading = false.obs;
 
   void login() async {
+    isLoading.value = true;
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -31,6 +33,7 @@ class LoginController extends GetxController {
       } else {
         Get.snackbar('Login fallido', usuarioModel.nombres ?? '');
       }
+      isLoading.value = false;
     }
   }
 

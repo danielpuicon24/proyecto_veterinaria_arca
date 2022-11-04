@@ -59,7 +59,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         _buttonIngresar(),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         InkWell(
                           onTap: () {
                             con.goToRegisterPage();
@@ -76,7 +78,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  Obx(
+                    () => con.isLoading.isTrue
+                        ? Container(
+                            color: Colors.white60,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : Container(),
+                  ),
                 ],
               ),
             ),
