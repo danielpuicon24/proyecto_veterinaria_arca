@@ -35,6 +35,10 @@ class HomeController extends GetxController {
     print('USUARIO DE SESION: ${user.toJson()}');
   }
 
+  void eliminarUsuario(){
+    Get.delete<UsuarioController>();
+  }
+
   void cerrarSesion() {
     prefs.logueado = false;
     GetStorage().remove('usuario');
@@ -45,6 +49,7 @@ class HomeController extends GetxController {
   void eliminarMascota(){
     Get.delete<MascotaController>();
   }
+
   void seleccionarMascota(MascotaModel mascotaModel){
     var mascota = mascotaModel.toJson();
     GetStorage().write('mascota', mascota);

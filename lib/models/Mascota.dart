@@ -4,7 +4,6 @@ class MascotaModel {
     required this.descripcion,
     required this.idCategoria,
     required this.edad,
-
     required this.imagen1,
     required this.estado,
     required this.flag,
@@ -20,15 +19,16 @@ class MascotaModel {
     required this.color,
     required this.raza,
     this.favorito,
+    this.activo,
   });
 
   String idMascota;
   String descripcion;
   String idCategoria;
   String edad;
-
   String imagen1;
   String estado;
+  String? activo;
   String flag;
   String idColor;
   String idRaza;
@@ -50,6 +50,7 @@ class MascotaModel {
     edad: json["Edad"],
     imagen1: json["Imagen1"],
     estado: json["Estado"],
+    activo: json["Activo"] ?? "",
     flag: json["Flag"],
     idColor: json["IdColor"],
     idRaza: json["IdRaza"],
@@ -72,6 +73,7 @@ class MascotaModel {
     "Edad": edad,
     "Imagen1": imagen1,
     "Estado": estado,
+    "Activo": activo,
     "Flag": flag,
     "IdColor": idColor,
     "IdRaza": idRaza,

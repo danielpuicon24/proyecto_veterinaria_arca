@@ -34,6 +34,7 @@ class DBArca {
             "Edad TEXT, "
             "Imagen1 TEXT, "
             "Estado TEXT, "
+            "Activo TEXT, "
             "Flag TEXT, "
             "IdColor TEXT, "
             "IdRaza TEXT, "
@@ -47,7 +48,6 @@ class DBArca {
             "Color TEXT, "
             "Raza TEXT, "
             "Favorito TEXT);");
-
       },
     );
   }
@@ -55,7 +55,8 @@ class DBArca {
   //Listar Mascotas
   Future<List> getMascotasRaw() async {
     final db = await getDatabase();
-    List<Map<String, dynamic>> res = await db!.rawQuery("SELECT * FROM MASCOTA");
+    List<Map<String, dynamic>> res =
+        await db!.rawQuery("SELECT * FROM MASCOTA");
     return res;
   }
 
@@ -67,33 +68,41 @@ class DBArca {
     return mascotas;
   }
 
-  Future<List<MascotaModel>> getMascotaRazaCategoria(String raza, String categoria) async {
+  Future<List<MascotaModel>> getMascotasActivos() async {
     final db = await getDatabase();
-    List<Map<String, dynamic>> res =
-    await db!.query("MASCOTA", where: "IdRaza = $raza and IdCategoria = $categoria");
+      List<Map<String, dynamic>> res = await db!.query("MASCOTA",  where: "Activo = 1 and Estado = 1");
     List<MascotaModel> mascotas =
-    res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
+        res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
+    return mascotas;
+  }
+
+  Future<List<MascotaModel>> getMascotaRazaCategoria(
+      String raza, String categoria) async {
+    final db = await getDatabase();
+    List<Map<String, dynamic>> res = await db!
+        .query("MASCOTA", where: "IdRaza = $raza and IdCategoria = $categoria");
+    List<MascotaModel> mascotas =
+        res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
     return mascotas;
   }
 
   Future<List<MascotaModel>> getMascotaRaza(String raza) async {
     final db = await getDatabase();
     List<Map<String, dynamic>> res =
-    await db!.query("MASCOTA", where: "IdRaza = $raza");
+        await db!.query("MASCOTA", where: "IdRaza = $raza");
     List<MascotaModel> mascotas =
-    res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
+        res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
     return mascotas;
   }
 
-  Future<List<MascotaModel>> getMascotaCategoria( String categoria) async {
+  Future<List<MascotaModel>> getMascotaCategoria(String categoria) async {
     final db = await getDatabase();
     List<Map<String, dynamic>> res =
-    await db!.query("MASCOTA", where: "IdCategoria = $categoria");
+        await db!.query("MASCOTA", where: "IdCategoria = $categoria");
     List<MascotaModel> mascotas =
-    res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
+        res.map<MascotaModel>((item) => MascotaModel.fromJson(item)).toList();
     return mascotas;
   }
-
 
   Future<List<MascotaModel>> getMascotaFavourites() async {
     final db = await getDatabase();
@@ -110,17 +119,17 @@ class DBArca {
     final db = await getDatabase();
     int res = await db!.rawInsert(
         "INSERT INTO MASCOTA(IdMascota, Descripcion, IdCategoria, Edad,"
-            " Imagen1, Estado, Flag, IdColor, IdRaza,"
-            "Genero, Vacunas, Tamanio, Esterelizado, Imagen2, Imagen3, Categoria, "
-            "Color, Raza) VALUES "
-            "('${mascotaModel.idMascota}','${mascotaModel.descripcion}', '${mascotaModel.idCategoria}', "
-            "'${mascotaModel.edad}','${mascotaModel.imagen1}', "
-            "'${mascotaModel.estado}','${mascotaModel.flag}','${mascotaModel.idColor}',"
-            "'${mascotaModel.idRaza}','${mascotaModel.genero}','${mascotaModel.vacunas}',"
-            "'${mascotaModel.tamanio}', '${mascotaModel.esterelizado}', '${mascotaModel.imagen2}', "
-            "'${mascotaModel.imagen3}', '${mascotaModel.categoria}', '${mascotaModel.color}', "
-            "'${mascotaModel.raza}')");
-            //"'${eventoModel.precioGeneral}', '${eventoModel.precioVip}','${eventoModel.precioBox}')");
+        " Imagen1, Estado, Activo, Flag, IdColor, IdRaza,"
+        "Genero, Vacunas, Tamanio, Esterelizado, Imagen2, Imagen3, Categoria, "
+        "Color, Raza) VALUES "
+        "('${mascotaModel.idMascota}','${mascotaModel.descripcion}', '${mascotaModel.idCategoria}', "
+        "'${mascotaModel.edad}','${mascotaModel.imagen1}', '${mascotaModel.estado}',"
+        "'${mascotaModel.activo}','${mascotaModel.flag}','${mascotaModel.idColor}',"
+        "'${mascotaModel.idRaza}','${mascotaModel.genero}','${mascotaModel.vacunas}',"
+        "'${mascotaModel.tamanio}', '${mascotaModel.esterelizado}', '${mascotaModel.imagen2}', "
+        "'${mascotaModel.imagen3}', '${mascotaModel.categoria}', '${mascotaModel.color}', "
+        "'${mascotaModel.raza}')");
+    //"'${eventoModel.precioGeneral}', '${eventoModel.precioVip}','${eventoModel.precioBox}')");
     return res;
   }
 
@@ -136,23 +145,25 @@ class DBArca {
   Future<int> updateMascota(MascotaModel mascotaModel) async {
     final db = await getDatabase();
     var row = {
-      'IdMascota'     : mascotaModel.idMascota,
-      'Descripcion'  : mascotaModel.descripcion,
-      'Edad' : mascotaModel.edad,
-      'Imagen1' : mascotaModel.imagen1,
-      'Estado' : mascotaModel.estado,
-      'Flag' : mascotaModel.flag,
-      'IdColor' : mascotaModel.idColor,
-      'IdRaza' : mascotaModel.idRaza,
-      'Genero' : mascotaModel.genero,
-      'Vacunas' : mascotaModel.vacunas,
-      'Tamanio' : mascotaModel.tamanio,
-      'Esterelizado' : mascotaModel.esterelizado,
-      'Imagen2' : mascotaModel.imagen2,
-      'Imagen3' : mascotaModel.imagen3,
-      'Categoria' : mascotaModel.categoria,
-      'Color' : mascotaModel.color,
-      'Raza' : mascotaModel.raza,
+      'IdMascota': mascotaModel.idMascota,
+      'IdCategoria': mascotaModel.idCategoria,
+      'Descripcion': mascotaModel.descripcion,
+      'Edad': mascotaModel.edad,
+      'Imagen1': mascotaModel.imagen1,
+      'Estado': mascotaModel.estado,
+      'Activo': mascotaModel.activo,
+      'Flag': mascotaModel.flag,
+      'IdColor': mascotaModel.idColor,
+      'IdRaza': mascotaModel.idRaza,
+      'Genero': mascotaModel.genero,
+      'Vacunas': mascotaModel.vacunas,
+      'Tamanio': mascotaModel.tamanio,
+      'Esterelizado': mascotaModel.esterelizado,
+      'Imagen2': mascotaModel.imagen2,
+      'Imagen3': mascotaModel.imagen3,
+      'Categoria': mascotaModel.categoria,
+      'Color': mascotaModel.color,
+      'Raza': mascotaModel.raza,
     };
 
     int updateCount = await db!.update("MASCOTA", row,
@@ -160,8 +171,6 @@ class DBArca {
 
     return updateCount;
   }
-
-
 
   Future<int> updateIsNotFavouriteMascota(String? id) async {
     final db = await getDatabase();
@@ -185,12 +194,16 @@ class DBArca {
     return result;
   }
 
+  Future<int> deleteMascota(String? id) async {
+    final db = await getDatabase();
+    int result = await db!.delete(
+      'MASCOTA',
+      where: "IdMascota = ?",
+      whereArgs: [id],
+    );
+    return result;
+  }
 
-
-  //INSERTAR NOTIFICACIONES
-
-
-
-
+//INSERTAR NOTIFICACIONES
 
 }

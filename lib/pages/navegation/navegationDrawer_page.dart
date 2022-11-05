@@ -288,7 +288,10 @@ class _NavegationDrawerPageState extends State<NavegationDrawerPage> {
                 width: 10,
               ),
               GestureDetector(
-                onTap: () => con.cerrarSesion(),
+                onTap: () {
+                  con.eliminarUsuario();
+                  con.cerrarSesion();
+                },
                 child: Text(
                   'Cerrar Sesión',
                   style: TextStyle(

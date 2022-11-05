@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   List<MascotaModel> mascotasA = [];
   List<MascotaModel> mascotasAux = [];
+  List<MascotaModel> mascotasAuxDB = [];
   List<CategoriaModel> listacategoria = [];
   String idRazaValue = "0";
   String idCategoriaValue = "0";
@@ -77,13 +78,18 @@ class _HomePageState extends State<HomePage> {
 
   listAllAnimals() async {
     mascotasAux = await animalsProvider.getListarMascotas();
+    mascotasAuxDB = await DBArca.db.getMascotas();
     for (var element in mascotasAux) {
-      DBArca.db.insertAllMascotaRaw(element);
-      DBArca.db.updateMascota(element);
+      if (mascotasAuxDB.isEmpty) {
+        DBArca.db.insertAllMascotaRaw(element);
+      } else {
+        DBArca.db.updateMascota(element);
+      }
+
+      //DBArca.db.updateMascota(element);
     }
 
-    setState(() {
-    });
+    setState(() {});
   }
 
   /*
@@ -127,7 +133,6 @@ class _HomePageState extends State<HomePage> {
 
 
    */
-
 
   @override
   void initState() {
@@ -312,7 +317,6 @@ class _HomePageState extends State<HomePage> {
                       onChanged: (value) {
                         idRazaValue = value!;
                         setState(() {});
-
                       },
                       onSaved: (value) {},
                     ),
@@ -419,7 +423,6 @@ class _HomePageState extends State<HomePage> {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
-
                         listaAnimales(context, idRazaValue, idCategoriaValue),
                       ],
                     ),
@@ -556,7 +559,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget listaAnimales(BuildContext context, String idRaza, String idCategoria) {
+  Widget listaAnimales(
+      BuildContext context, String idRaza, String idCategoria) {
     HomeController homeController = Get.put(HomeController());
     Future<void> addORDeleteFavourite(String? idMascota, String result) async {
       result == "false" || result.isEmpty
@@ -613,8 +617,8 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(5.0),
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image:
-                                        NetworkImage(mascotas[index].imagen1),
+                                        image: NetworkImage(
+                                            mascotas[index].imagen1),
                                       ),
                                     ),
                                   ),
@@ -629,7 +633,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () {
-                                      addORDeleteFavourite(mascotas[index].idMascota, mascotas[index].favorito!);
+                                      addORDeleteFavourite(
+                                          mascotas[index].idMascota,
+                                          mascotas[index].favorito!);
                                       //infoAnimalController.addOrNotFavorite2();
                                     },
                                     padding: EdgeInsets.zero,
@@ -694,7 +700,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const InfoAnimalPage()));
+                                        builder: (context) =>
+                                            const InfoAnimalPage()));
                               },
                               child: Container(
                                 height: 40,
@@ -706,7 +713,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Image.asset(
                                         "assets/images/perro.png",
@@ -742,7 +750,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-    }else if (idRaza != "0" && idCategoria == "0"){
+    } else if (idRaza != "0" && idCategoria == "0") {
       child = Expanded(
         flex: 3,
         child: Padding(
@@ -788,8 +796,8 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(5.0),
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image:
-                                        NetworkImage(mascotas[index].imagen1),
+                                        image: NetworkImage(
+                                            mascotas[index].imagen1),
                                       ),
                                     ),
                                   ),
@@ -804,7 +812,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () {
-                                      addORDeleteFavourite(mascotas[index].idMascota, mascotas[index].favorito!);
+                                      addORDeleteFavourite(
+                                          mascotas[index].idMascota,
+                                          mascotas[index].favorito!);
                                       //infoAnimalController.addOrNotFavorite2();
                                     },
                                     padding: EdgeInsets.zero,
@@ -869,7 +879,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => InfoAnimalPage()));
+                                        builder: (context) =>
+                                            InfoAnimalPage()));
                               },
                               child: Container(
                                 height: 40,
@@ -881,7 +892,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Image.asset(
                                         "assets/images/perro.png",
@@ -917,7 +929,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-    } else if (idRaza == "0" && idCategoria != "0"){
+    } else if (idRaza == "0" && idCategoria != "0") {
       child = Expanded(
         flex: 3,
         child: Padding(
@@ -963,8 +975,8 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(5.0),
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image:
-                                        NetworkImage(mascotas[index].imagen1),
+                                        image: NetworkImage(
+                                            mascotas[index].imagen1),
                                       ),
                                     ),
                                   ),
@@ -979,7 +991,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () {
-                                      addORDeleteFavourite(mascotas[index].idMascota, mascotas[index].favorito!);
+                                      addORDeleteFavourite(
+                                          mascotas[index].idMascota,
+                                          mascotas[index].favorito!);
                                       //infoAnimalController.addOrNotFavorite2();
                                     },
                                     padding: EdgeInsets.zero,
@@ -1044,7 +1058,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => InfoAnimalPage()));
+                                        builder: (context) =>
+                                            InfoAnimalPage()));
                               },
                               child: Container(
                                 height: 40,
@@ -1056,7 +1071,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Image.asset(
                                         "assets/images/perro.png",
@@ -1092,13 +1108,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-    } else{
+    } else {
       child = Expanded(
         flex: 3,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FutureBuilder(
-            future: DBArca.db.getMascotas(),
+            future: DBArca.db.getMascotasActivos(),
             builder: (BuildContext context, AsyncSnapshot snap) {
               if (snap.hasData) {
                 List<MascotaModel> mascotas = snap.data;
@@ -1138,8 +1154,8 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(5.0),
                                       image: DecorationImage(
                                         fit: BoxFit.cover,
-                                        image:
-                                        NetworkImage(mascotas[index].imagen1),
+                                        image: NetworkImage(
+                                            mascotas[index].imagen1),
                                       ),
                                     ),
                                   ),
@@ -1154,7 +1170,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () {
-                                      addORDeleteFavourite(mascotas[index].idMascota, mascotas[index].favorito!);
+                                      addORDeleteFavourite(
+                                          mascotas[index].idMascota,
+                                          mascotas[index].favorito!);
                                       //infoAnimalController.addOrNotFavorite2();
                                     },
                                     padding: EdgeInsets.zero,
@@ -1219,7 +1237,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => InfoAnimalPage()));
+                                        builder: (context) =>
+                                            InfoAnimalPage()));
                               },
                               child: Container(
                                 height: 40,
@@ -1231,7 +1250,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Image.asset(
                                         "assets/images/perro.png",
@@ -1283,5 +1303,3 @@ List<BoxShadow> shadowList = [
       blurRadius: 30,
       offset: Offset(0, 10))
 ];
-
-
